@@ -4,9 +4,8 @@ const Image = (props) => {
   const author = props.author;
   return (
     <>
-      <div id="imgGrid">
+      <div class="thumbnail">
         <img
-          class="thumbnail"
           src={image_url}
           alt={title}
           onClick={() => {
