@@ -3,14 +3,18 @@ const Image = (props) => {
   const title = props.caption;
   const author = props.author;
   return (
-    <img
-      id="imgGrid"
-      src={image_url}
-      alt={title}
-      onClick={() => {
-        alert(image_url + "\n\n" + title + "\n\n" + author);
-      }}
-    />
+    <>
+      <div id="imgGrid">
+        <img
+          id="imgGridImg"
+          src={image_url}
+          alt={title}
+          onClick={() => {
+            alert(image_url + "\n\n" + title + "\n\n" + author);
+          }}
+        />
+      </div>
+    </>
   );
 };
 
