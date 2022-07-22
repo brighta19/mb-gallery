@@ -6,7 +6,7 @@ import "../style.scss";
 const Loader = () => {
   return (
     <div id="loaderHolder">
-      <div class="lds-roller">
+      <div className="lds-roller">
         <div></div>
         <div></div>
         <div></div>

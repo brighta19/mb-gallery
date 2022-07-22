@@ -3,6 +3,7 @@ import { useEffect, useState, useContext } from "react";
 //Components
 import Post from "../component/Post";
 import Loader from "../component/Loader";
+import Image from "../component/Image";
 
 //Context
 import { ConfigContext } from "../GlobalContext";
@@ -25,18 +26,28 @@ const Landing = () => {
     });
   }, []);
 
+  //Format a name to be capitalized first letter and lowercase the rest for each word <= Github copilot did that
+  const formatName = (name) => {
+    const nameArray = name.split(" ");
+    const newName = nameArray
+      .map((word) => {
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      })
+      .join(" ");
+    return newName;
+  };
+
   if (loading) {
     return (
       <>
-        <div id="postsholder">
+        <div id="imgGridHolder">
           {keys.map((key) => {
             return (
               <>
-                <Post
-                  key={key}
-                  author={data[key].author}
+                <Image
+                  image_url={data[key].image_url}
                   caption={data[key].description}
-                  image={data[key].image_url}
+                  author={formatName(data[key].author)}
                 />
               </>
             );
