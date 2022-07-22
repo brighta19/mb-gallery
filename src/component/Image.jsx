@@ -4,13 +4,7 @@ const Image = (props) => {
   const author = props.author;
   return (
     <div className="thumbnail">
-      <img
-        src={image_url}
-        alt={title}
-        onClick={() => {
-          alert(image_url + "\n\n" + title + "\n\n" + author);
-        }}
-      />
+      <img src={image_url} alt={title} onClick={props.onClick} />
     </div>
   );
 };

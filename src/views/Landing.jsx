@@ -4,6 +4,12 @@ import { useEffect, useState, useContext } from "react";
 import Post from "../component/Post";
 import Loader from "../component/Loader";
 import Image from "../component/Image";
+import Modal from "../component/Modal";
+
+//Styles
+import "../style.scss";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Button } from "react-bootstrap";
 
 //Context
 import { ConfigContext } from "../GlobalContext";
@@ -14,15 +20,18 @@ import { getData } from "../function/firebaseMethods.js";
 const Landing = () => {
   const Globalconfig = useContext(ConfigContext);
 
+  //States
   const [data, setData] = useState([]);
   const [keys, setKeys] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedKey, setSelectedKey] = useState("");
+  const [modalVisibility, setModalVisibility] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
 
   useEffect(() => {
     getData(Globalconfig.database, "posts/").then((retData) => {
       setData(retData);
-      const k = Object.keys(retData).sort((a, b) => 0.5 - Math.random())
+      const k = Object.keys(retData).sort((a, b) => 0.5 - Math.random());
       setKeys(k);
       setLoading(true);
 
@@ -35,7 +44,9 @@ const Landing = () => {
         [...thumbnails].find((tn, index) => {
           const rect = tn.getBoundingClientRect();
           const top = rect.top;
-          const isInView = top >= range[0] * window.innerHeight && top <= range[1] * window.innerHeight;
+          const isInView =
+            top >= range[0] * window.innerHeight &&
+            top <= range[1] * window.innerHeight;
 
           if (isInView) {
             if (selectedThumbnail !== tn) {
@@ -47,20 +58,19 @@ const Landing = () => {
           }
           return false;
         });
-      }
+      };
 
       // Only selects thumbnail on mobile
       const handleSelectThumbnail = () => {
         if (window.innerWidth < 630) {
           window.addEventListener("scroll", selectThumbnail);
           selectThumbnail();
-        }
-        else {
+        } else {
           window.removeEventListener("scroll", selectThumbnail);
           document.querySelector(".selected")?.classList.remove("selected");
           setSelectedKey("");
         }
-      }
+      };
 
       // In case of desktop
       window.addEventListener("resize", handleSelectThumbnail);
@@ -90,10 +100,24 @@ const Landing = () => {
                 image_url={data[key].image_url}
                 caption={data[key].description}
                 author={formatName(data[key].author)}
+                onClick={() => {
+                  setSelectedImage(data[key].image_url);
+                  setModalVisibility(true);
+                }}
               />
             );
           })}
         </div>
+        <Modal visibility={modalVisibility}>
+          <img id="modalImage" src={selectedImage} />
+          <Button
+            id="modalClose"
+            variant="danger"
+            onClick={() => setModalVisibility(false)}
+          >
+            Close
+          </Button>
+        </Modal>
         {selectedKey !== "" && (
           <div id="postDescription">
             <p>{formatName(data[selectedKey].author)}</p>
