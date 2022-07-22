@@ -19,22 +19,23 @@ const Upload = () => {
 
   const [imgSrc, setImgSrc] = useState("");
   return (
-    <>
-      <img src={imgSrc} alt="" />
-      <br></br>
+    <div class="form">
+      <div class="thumbnail" style={{ opacity: imgSrc === "" ? 0 : 1 }}>
+        <img src={imgSrc} alt=""/>
+      </div>
+
       <input
         type="file"
         id="image"
+        style={{ width: "100%" }}
         onChange={() => {
           const file = document.getElementById("image").files[0];
           setImgSrc(URL.createObjectURL(file));
         }}
       />
-      <br></br>
       <input type="text" id="caption" placeholder="Description" />
-      <br></br>
       <input type="author" id="author" placeholder="Author" />
-      <br></br>
+
       <Button
         variant="success"
         onClick={() => {
@@ -67,7 +68,7 @@ const Upload = () => {
       >
         Upload
       </Button>
-    </>
+    </div>
   );
 };
 
