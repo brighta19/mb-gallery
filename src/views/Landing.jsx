@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from "react";
+import { isMobile } from "react-device-detect";
 
 //Components
 import Post from "../component/Post";
@@ -101,8 +102,10 @@ const Landing = () => {
                 caption={data[key].description}
                 author={formatName(data[key].author)}
                 onClick={() => {
-                  setSelectedImage(data[key].image_url);
-                  setModalVisibility(true);
+                  if (isMobile === false) {
+                    setSelectedImage(data[key].image_url);
+                    setModalVisibility(true);
+                  }
                 }}
               />
             );
