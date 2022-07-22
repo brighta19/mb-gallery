@@ -1,5 +1,3 @@
-import { useEffect, useState, useContext } from "react";
-
 //Styles
 import "../style.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
