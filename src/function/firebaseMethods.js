@@ -17,7 +17,16 @@ export function writeData(database, Refpath, data) {
   set(ref(database, Refpath), data);
 }
 
-export async function uploadImageAndSetUrl(storage, ref, file, stateSetter) {
+/*
+@param database = Firebase database initialization
+@param ref = path of the reference
+@file = the image file to be uploaded
+
+Uploads file to Firebase storage and returns the url of the image
+
+@returns url of the image
+*/
+export async function uploadImageAndSetUrl(storage, ref, file) {
   const storageRef = sRef(storage, ref);
   let promise = new Promise(function (resolve, reject) {
     uploadBytes(storageRef, file).then((snap) => {

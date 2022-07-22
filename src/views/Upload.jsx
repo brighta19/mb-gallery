@@ -48,8 +48,7 @@ const Upload = () => {
           uploadImageAndSetUrl(
             Globalconfig.storage,
             "posts/" + postKey + "/image.jpg",
-            image,
-            setImgSrc
+            image
           ).then((url) => {
             const data = {
               description: caption,
