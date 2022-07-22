@@ -95,6 +95,7 @@
 #imgGridHolder{
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .post{
@@ -107,7 +108,7 @@
 }
 
 #imgGrid{
-    width:20vw;
+    height:20vw;
     transition: 0.1s ease-in-out;
     &:hover{
         cursor: pointer;
