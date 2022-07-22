@@ -21,7 +21,7 @@ const Landing = () => {
   useEffect(() => {
     getData(Globalconfig.database, "posts/").then((retData) => {
       setData(retData);
-      setKeys(Object.keys(retData));
+      setKeys(Object.keys(retData).sort((a, b) => 0.5 - Math.random()));
       setLoading(true);
     });
   }, []);
