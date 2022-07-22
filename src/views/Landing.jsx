@@ -17,12 +17,54 @@ const Landing = () => {
   const [data, setData] = useState([]);
   const [keys, setKeys] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedKey, setSelectedKey] = useState("");
 
   useEffect(() => {
     getData(Globalconfig.database, "posts/").then((retData) => {
       setData(retData);
-      setKeys(Object.keys(retData).sort((a, b) => 0.5 - Math.random()));
+      const k = Object.keys(retData).sort((a, b) => 0.5 - Math.random())
+      setKeys(k);
       setLoading(true);
+
+      // Selects thumbnail based on scroll position (on mobile)
+      const selectThumbnail = () => {
+        const thumbnails = document.querySelectorAll(".thumbnail");
+        const range = [0.05, 0.4];
+        const selectedThumbnail = document.querySelector(".selected");
+
+        [...thumbnails].find((tn, index) => {
+          const rect = tn.getBoundingClientRect();
+          const top = rect.top;
+          const isInView = top >= range[0] * window.innerHeight && top <= range[1] * window.innerHeight;
+
+          if (isInView) {
+            if (selectedThumbnail !== tn) {
+              selectedThumbnail?.classList.remove("selected");
+              tn.classList.add("selected");
+              setSelectedKey(k[index]);
+            }
+            return true;
+          }
+          return false;
+        });
+      }
+
+      // Only selects thumbnail on mobile
+      const handleSelectThumbnail = () => {
+        if (window.innerWidth < 630) {
+          window.addEventListener("scroll", selectThumbnail);
+          selectThumbnail();
+        }
+        else {
+          window.removeEventListener("scroll", selectThumbnail);
+          document.querySelector(".selected")?.classList.remove("selected");
+          setSelectedKey("");
+        }
+      }
+
+      // In case of desktop
+      window.addEventListener("resize", handleSelectThumbnail);
+      handleSelectThumbnail();
     });
   }, []);
 
@@ -43,16 +85,21 @@ const Landing = () => {
         <div id="imgGridHolder">
           {keys.map((key) => {
             return (
-              <>
-                <Image
-                  image_url={data[key].image_url}
-                  caption={data[key].description}
-                  author={formatName(data[key].author)}
-                />
-              </>
+              <Image
+                key={key}
+                image_url={data[key].image_url}
+                caption={data[key].description}
+                author={formatName(data[key].author)}
+              />
             );
           })}
         </div>
+        {selectedKey !== "" && (
+          <div id="postDescription">
+            <p>{formatName(data[selectedKey].author)}</p>
+            <p>{data[selectedKey].description}</p>
+          </div>
+        )}
       </>
     );
   } else {
