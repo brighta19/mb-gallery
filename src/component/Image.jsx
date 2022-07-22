@@ -6,7 +6,7 @@ const Image = (props) => {
     <>
       <div id="imgGrid">
         <img
-          id="imgGridImg"
+          class="thumbnail"
           src={image_url}
           alt={title}
           onClick={() => {
