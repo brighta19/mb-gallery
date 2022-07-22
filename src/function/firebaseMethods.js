@@ -1,4 +1,4 @@
-import { ref, set } from "firebase/database";
+import { getDatabase, ref, set, get } from "firebase/database";
 import {
   getStorage,
   uploadBytes,
@@ -37,4 +37,23 @@ export async function uploadImageAndSetUrl(storage, ref, file) {
   });
   const url = await promise;
   return url;
+}
+
+/*
+@param database = Firebase database initialization
+@param ref = path of the reference
+
+Gets data from Refpath Firebase database
+
+@returns data at Refpath
+*/
+export async function getData(database, DBref) {
+  let promise = new Promise((resolve, reject) => {
+    const DbRef = ref(database, DBref);
+    get(DbRef).then((snap) => {
+      resolve(snap.val());
+    });
+  });
+  const data = await promise;
+  return data;
 }

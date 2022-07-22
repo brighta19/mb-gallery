@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 
 //Styles
-import "../style.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button } from "react-bootstrap";
 
@@ -67,13 +66,6 @@ const Upload = () => {
         }}
       >
         Upload
-      </Button>
-      <Button
-        onClick={() => {
-          console.log(imgSrc);
-        }}
-      >
-        Try
       </Button>
     </>
   );
