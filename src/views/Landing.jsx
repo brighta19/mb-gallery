@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { isMobile } from "react-device-detect";
+import { Palette } from "react-palette";
 
 //Components
 import Post from "../component/Post";
@@ -25,7 +26,7 @@ const Landing = () => {
   const Globalconfig = useContext(ConfigContext);
 
   //States
-  const [data, setData] = useState([]);
+  const [FirebaseData, setFirebaseData] = useState([]);
   const [keys, setKeys] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedKey, setSelectedKey] = useState("");
@@ -36,10 +37,11 @@ const Landing = () => {
   const [selectedAuthor, setSelectedAuthor] = useState("");
   const [selectedKeyArr, setSelectedKeyArr] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  // const [colorPalette, setColorPalette] = useState({});
 
   useEffect(() => {
     getData(Globalconfig.database, "posts/").then((retData) => {
-      setData(retData);
+      setFirebaseData(retData);
       const k = Object.keys(retData).sort((a, b) => 0.5 - Math.random());
       setKeys(k);
       setLoading(true);
@@ -106,14 +108,14 @@ const Landing = () => {
             return (
               <Image
                 key={key}
-                image_url={data[key].image_url}
-                caption={data[key].description}
-                author={formatName(data[key].author)}
+                image_url={FirebaseData[key].image_url}
+                caption={FirebaseData[key].description}
+                author={formatName(FirebaseData[key].author)}
                 onClick={() => {
                   if (isMobile === false) {
-                    setSelectedImage(data[key].image_url);
+                    setSelectedImage(FirebaseData[key].image_url);
                     setModalVisibility(true);
-                    setSelectedAuthor(formatName(data[key].author));
+                    setSelectedAuthor(formatName(FirebaseData[key].author));
                     setSelectedKeyArr(key);
                     setSelectedIndex(keys.indexOf(key));
                   }
@@ -122,49 +124,65 @@ const Landing = () => {
             );
           })}
         </div>
-        <Modal visibility={modalVisibility}>
-          <img id="modalImage" src={selectedImage} />
-          <h5 className="author">Creator: {selectedAuthor}</h5>
-          <Button
-            id="modalClose"
-            variant="danger"
-            onClick={() => setModalVisibility(false)}
-          >
-            Close
-          </Button>
-          <Button
-            id="nextImage"
-            onClick={() => {
-              if (selectedIndex < keys.length - 1) {
-                setSelectedIndex(selectedIndex + 1);
-                setSelectedImage(data[keys[selectedIndex + 1]].image_url);
-                setSelectedAuthor(
-                  formatName(data[keys[selectedIndex + 1]].author)
-                );
-              }
-            }}
-          >
-            <GrNext />
-          </Button>
-          <Button
-            id="prevImage"
-            onClick={() => {
-              if (selectedIndex > 0) {
-                setSelectedIndex(selectedIndex - 1);
-                setSelectedImage(data[keys[selectedIndex - 1]].image_url);
-                setSelectedAuthor(
-                  formatName(data[keys[selectedIndex - 1]].author)
-                );
-              }
-            }}
-          >
-            <GrPrevious />
-          </Button>
-        </Modal>
+
+        <Palette src={selectedImage}>
+          {({ data, loading, error }) => (
+            <Modal
+              visibility={modalVisibility}
+              bgColor1={data.lightMuted}
+              bgColor2={data.lightVibrant}
+            >
+              <img id="modalImage" src={selectedImage} />
+              <h5 className="author">Creator: {selectedAuthor}</h5>
+              <Button
+                id="modalClose"
+                variant="danger"
+                onClick={() => setModalVisibility(false)}
+              >
+                Close
+              </Button>
+
+              {/* Next and Previous buttons */}
+              <Button
+                id="nextImage"
+                onClick={() => {
+                  if (selectedIndex < keys.length - 1) {
+                    setSelectedIndex(selectedIndex + 1);
+                    setSelectedImage(
+                      FirebaseData[keys[selectedIndex + 1]].image_url
+                    );
+                    setSelectedAuthor(
+                      formatName(FirebaseData[keys[selectedIndex + 1]].author)
+                    );
+                  }
+                }}
+              >
+                <GrNext />
+              </Button>
+              <Button
+                id="prevImage"
+                onClick={() => {
+                  if (selectedIndex > 0) {
+                    setSelectedIndex(selectedIndex - 1);
+                    setSelectedImage(
+                      FirebaseData[keys[selectedIndex - 1]].image_url
+                    );
+                    setSelectedAuthor(
+                      formatName(FirebaseData[keys[selectedIndex - 1]].author)
+                    );
+                  }
+                }}
+              >
+                <GrPrevious />
+              </Button>
+            </Modal>
+          )}
+        </Palette>
+
         {selectedKey !== "" && (
           <div id="postDescription">
-            <p>{formatName(data[selectedKey].author)}</p>
-            <p>{data[selectedKey].description}</p>
+            <p>{formatName(FirebaseData[selectedKey].author)}</p>
+            <p>{FirebaseData[selectedKey].description}</p>
           </div>
         )}
       </>
