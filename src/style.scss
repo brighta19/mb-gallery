@@ -1,3 +1,6 @@
+//Fonts
+@import url('https://fonts.googleapis.com/css2?family=Edu+TAS+Beginner&display=swap');
+
 //Loader
 #loaderHolder{
     display: flex;
@@ -213,6 +216,38 @@
     transform: translate(-50%, -50%);
 }
 
+#nextImage{
+    position: fixed;
+    cursor: pointer;
+    transition: 0.1s ease-in-out;
+    z-index: 100;
+    color: #fff;
+    font-weight: bold;
+    animation: fadeIn 0.2s ease-in-out;
+    background-color: transparent;
+    border: transparent;
+    font-size: 80px;
+    top: 50%;
+    left: 100%;
+    transform: translate(-50%, -50%);
+}
+
+#prevImage{
+    position: fixed;
+    cursor: pointer;
+    transition: 0.1s ease-in-out;
+    z-index: 100;
+    color: #fff;
+    font-weight: bold;
+    animation: fadeIn 0.2s ease-in-out;
+    background-color: transparent;
+    border: transparent;
+    font-size: 80px;
+    top: 50%;
+    left: 0%;
+    transform: translate(-50%, -50%);
+}
+
 #modalImage{
     margin-top: 10px;
     max-width: 100%;
@@ -222,6 +257,11 @@
     box-shadow: 0 5px 20px #aaa;
     border-radius: 25px;
     padding: 5px;
+}
+
+.author{
+    font-family: 'Edu TAS Beginner', cursive;
+    font-weight: bold;
 }
 
 //Modal
