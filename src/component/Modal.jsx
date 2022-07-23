@@ -10,7 +10,10 @@ const Modal = (props) => {
       ></div>
       <div
         className="customModal"
-        style={{ display: props.visibility ? "block" : "none" }}
+        style={{
+          display: props.visibility ? "block" : "none",
+          background: `linear-gradient(to right, ${props.bgColor1}, ${props.bgColor2})`,
+        }}
       >
         {props.children}
       </div>
