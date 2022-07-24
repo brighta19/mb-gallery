@@ -3,10 +3,10 @@
 
 //Loader
 #loaderHolder{
-    display: flex;
+    // display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    // height: 100vh;
 }
 .lds-roller {
     display: inline-block;
@@ -148,6 +148,8 @@
 }
 
 .thumbnail {
+    display: flex;
+    align-items: center;
     height:30vh;
     margin: 20px;
     box-shadow: 0 5px 20px #aaa;
@@ -278,10 +280,9 @@
     border-radius: 25px;
     text-align: center;
     animation: fadeIn 0.2s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
 }
 
 .modalOverlay{

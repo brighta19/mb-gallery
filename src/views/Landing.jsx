@@ -37,6 +37,7 @@ const Landing = () => {
   const [selectedAuthor, setSelectedAuthor] = useState("");
   const [selectedKeyArr, setSelectedKeyArr] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [modalLoaderVisibility, setModalLoaderVisibility] = useState(true);
   // const [colorPalette, setColorPalette] = useState({});
 
   useEffect(() => {
@@ -132,7 +133,17 @@ const Landing = () => {
               bgColor1={data.lightMuted}
               bgColor2={data.lightVibrant}
             >
-              <img id="modalImage" src={selectedImage} />
+              <Loader visibility={modalLoaderVisibility} />
+              <img
+                style={{
+                  display: modalLoaderVisibility === false ? "" : "none",
+                }}
+                id="modalImage"
+                src={selectedImage}
+                onLoad={() => {
+                  setModalLoaderVisibility(false);
+                }}
+              />
               <h5 className="author">Creator: {selectedAuthor}</h5>
               <Button
                 id="modalClose"

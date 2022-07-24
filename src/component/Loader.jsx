@@ -3,9 +3,12 @@
 //Style
 import "../style.scss";
 
-const Loader = () => {
+const Loader = (props) => {
   return (
-    <div id="loaderHolder">
+    <div
+      style={{ display: props.visibility === true ? "block" : "none" }}
+      id="loaderHolder"
+    >
       <div className="lds-roller">
         <div></div>
         <div></div>
