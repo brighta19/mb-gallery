@@ -22,3 +22,5 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+/mb-gallery-50105-firebase-adminsdk-9by9y-2fa9dccc5c.json
