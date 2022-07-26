@@ -19,7 +19,7 @@ import { getData } from "../function/firebaseMethods.js";
 
 const Upload = () => {
   const Globalconfig = useContext(ConfigContext);
-  const [loginWall, setLoginWall] = useState(false);
+  const [loginWall, setLoginWall] = useState(true);
 
   useEffect(() => {
     getData(Globalconfig.database, "loginWall").then((retData) => {
