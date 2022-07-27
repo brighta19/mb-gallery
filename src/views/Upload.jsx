@@ -17,6 +17,9 @@ import { ConfigContext } from "../GlobalContext";
 //Firebase Methods
 import { getData } from "../function/firebaseMethods.js";
 
+//Components Import
+import Loader from "../component/Loader";
+
 const Upload = () => {
   const Globalconfig = useContext(ConfigContext);
   const [loginWall, setLoginWall] = useState(true);
@@ -50,8 +53,10 @@ const Upload = () => {
 
         <Button
           variant="success"
+          id="uploadBtn"
           onClick={() => {
-            //Prepare data
+            document.getElementById("uploadBtn").disabled = "disabled";
+            // //Prepare data
             const caption = document.getElementById("caption").value;
             const author = document.getElementById("author").value;
             const image = document.getElementById("image").files[0];
@@ -75,13 +80,16 @@ const Upload = () => {
               document.getElementById("author").value = "";
               document.getElementById("image").value = "";
               setImgSrc("");
-
-              //TO DO: Set a success message
+              document.getElementById("successImg").style.display = "block";
+              document.getElementById("uploadBtn").disabled = "";
             });
           }}
         >
           Upload
         </Button>
+        <p id="successImg" style={{ color: "green", display: "none" }}>
+          Image uploadeed successfully!
+        </p>
       </div>
     );
   } else {
