@@ -24,6 +24,8 @@ const Upload = () => {
   const Globalconfig = useContext(ConfigContext);
   const [loginWall, setLoginWall] = useState(true);
 
+  const [loaderVisibility, setLoaderVisibility] = useState(false);
+
   useEffect(() => {
     getData(Globalconfig.database, "loginWall").then((retData) => {
       setLoginWall(retData);
@@ -56,6 +58,7 @@ const Upload = () => {
           id="uploadBtn"
           onClick={() => {
             document.getElementById("uploadBtn").disabled = "disabled";
+            setLoaderVisibility(true);
             // //Prepare data
             const caption = document.getElementById("caption").value;
             const author = document.getElementById("author").value;
@@ -82,11 +85,13 @@ const Upload = () => {
               setImgSrc("");
               document.getElementById("successImg").style.display = "block";
               document.getElementById("uploadBtn").disabled = "";
+              setLoaderVisibility(false);
             });
           }}
         >
           Upload
         </Button>
+        <Loader visibility={loaderVisibility} />
         <p id="successImg" style={{ color: "green", display: "none" }}>
           Image uploadeed successfully!
         </p>
