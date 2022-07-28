@@ -145,6 +145,7 @@
     flex-wrap: wrap;
     justify-content: center;
     margin: 40px 0 40vh;
+    overflow-x: hidden;
 }
 
 .thumbnail {
@@ -156,6 +157,8 @@
     padding: 5px;
     border-radius: 25px;
     transition: 0.1s ease-in-out;
+    transform: rotate(var(--rotation));
+    background-color: white;
 
     &.selected {
         border: 5px solid #0af;
@@ -163,7 +166,8 @@
 
     &:hover{
         cursor: pointer;
-        transform: scale(1.1);
+        z-index: 1;
+        transform: scale(1.2);
     }
 }
 

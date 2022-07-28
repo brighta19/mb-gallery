@@ -9,8 +9,11 @@ const Image = (props) => {
   const image_url = props.image_url;
   const title = props.caption;
   const author = props.author;
+
+  const randomRotation = () => `${Math.floor(Math.random() * 8 - 4)}deg`;
+
   return (
-    <div className="thumbnail">
+    <div className="thumbnail" style={{ "--rotation": randomRotation() }}>
       <img
         style={{ display: loaderVisibility === false ? "block" : "none" }}
         src={image_url}
