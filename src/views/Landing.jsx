@@ -2,39 +2,44 @@ import { useEffect, useState, useContext } from "react";
 import { isMobile } from "react-device-detect";
 import { Palette } from "react-palette";
 
-//Components
+// Components
 import Post from "../component/Post";
 import Loader from "../component/Loader";
 import Image from "../component/Image";
 import Modal from "../component/Modal";
 
-//Styles
+// Styles
 import "../style.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button } from "react-bootstrap";
-//Icons
+
+// Icons
 import { GrNext } from "react-icons/gr";
 import { GrPrevious } from "react-icons/gr";
 
-//Context
+// Assets
+import ProfileImg from "../assets/metabronx.jpeg";
+
+// Context
 import { ConfigContext } from "../GlobalContext";
 
-//Firebase Methods
+// Firebase Methods
 import { getData } from "../function/firebaseMethods.js";
 
 const Landing = () => {
   const Globalconfig = useContext(ConfigContext);
 
-  //States
+  // States
   const [FirebaseData, setFirebaseData] = useState([]);
   const [keys, setKeys] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedKey, setSelectedKey] = useState("");
 
-  //Modal States
+  // Modal States
   const [modalVisibility, setModalVisibility] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedAuthor, setSelectedAuthor] = useState("");
+  const [selectedDescription, setSelectedDescription] = useState("");
   const [selectedKeyArr, setSelectedKeyArr] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [modalLoaderVisibility, setModalLoaderVisibility] = useState(true);
@@ -104,6 +109,17 @@ const Landing = () => {
   if (loading) {
     return (
       <>
+        <div className="information mt-4 mb-4">
+          <img key='1' src={ProfileImg} alt="Profile" />
+          <h3 className="mt-2">MetaBronx</h3>
+          <p>All the artworks are made by 2022 summer cohort participants</p>
+          <div className="social mt-2">
+            <a href='https://www.metabronx.com/' target='_blank'>Website</a> 
+            <a href='mailto:metabronx@gmail.com?Subject:hello' target='_blank'>Contact</a>
+          </div>
+        </div>
+        <hr></hr>
+
         <div id="imgGridHolder">
           {keys.map((key) => {
             return (
@@ -144,7 +160,8 @@ const Landing = () => {
                   setModalLoaderVisibility(false);
                 }}
               />
-              <h5 className="author">Creator: {selectedAuthor}</h5>
+              <h5 className="author mt-3">By {selectedAuthor}</h5>
+              <h5 className="author">Artist Statement: {selectedDescription}</h5>
               <Button
                 id="modalClose"
                 variant="danger"
@@ -165,6 +182,9 @@ const Landing = () => {
                     setSelectedAuthor(
                       formatName(FirebaseData[keys[selectedIndex + 1]].author)
                     );
+                    setSelectedDescription(
+                      formatName(FirebaseData[keys[selectedIndex + 1]].description)
+                    );
                   }
                 }}
               >
@@ -179,7 +199,10 @@ const Landing = () => {
                       FirebaseData[keys[selectedIndex - 1]].image_url
                     );
                     setSelectedAuthor(
-                      formatName(FirebaseData[keys[selectedIndex - 1]].author)
+                      formatName(FirebaseData[keys[selectedIndex - 1]].author),
+                    );
+                    setSelectedDescription(
+                      formatName(FirebaseData[keys[selectedIndex + 1]].description)
                     );
                   }
                 }}
