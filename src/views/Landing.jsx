@@ -114,8 +114,8 @@ const Landing = () => {
           <h3 className="mt-2">MetaBronx</h3>
           <p>All the artworks are made by 2022 summer cohort participants</p>
           <div className="social mt-2">
-            <a href='https://www.metabronx.com/' target='_blank'>Website</a> 
-            <a href='mailto:metabronx@gmail.com?Subject:hello' target='_blank'>Contact</a>
+            <a href='https://www.metabronx.com/' rel="noreferrer" target='_blank'>Website</a> 
+            <a href='mailto:metabronx@gmail.com?Subject:hello' rel="noreferrer" target='_blank'>Contact</a>
           </div>
         </div>
         <hr></hr>
@@ -219,6 +219,7 @@ const Landing = () => {
             <p>{FirebaseData[selectedKey].description}</p>
           </div>
         )}
+        <p className="footer mb-5">All materials © 2022-Present, their respective owners or MetaBronx Inc.</p>
       </>
     );
   } else {
