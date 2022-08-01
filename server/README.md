@@ -35,7 +35,7 @@ pipenv install -r requirements.txt
 ### Step 2: The Environment Variables
 Get `.env` file from one of the devs working on the project to connect to database and place in server's root directory.  
 
-For `JWT_SECRET` in .env file, you can regenerate new secret using the following command:
+For `JWT_SECRET` in `.env` file, you can regenerate new secret using the following command:
 ```
 openssl rand -hex 32
 ```
@@ -83,12 +83,12 @@ If you want, you can set up you own local database too. The original schema for 
 
 ## Backlog
 
-- [] User authentication implementation
+- [ ] User authentication implementation
    - [x] Role-based access to certain routes
    - [x] Generate bearer token on login
    - [x] Protect routes using `auth_wrapper`
    - [ ] Generate refresh token
    - [ ] Figure out all other kinds of token and how to use/implement them for authentication and authorization
-- [] Dockerize the entire project
-- [] Separate Authentication code and Classes from `main.py`
-- [] Organize folder structure
+- [ ] Dockerize the entire project
+- [ ] Separate Authentication code and Classes from `main.py`
+- [ ] Organize folder structure
