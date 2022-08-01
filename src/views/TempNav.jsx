@@ -18,7 +18,7 @@ const TempNav = () => {
       </Button>
       <Button
         onClick={() => {
-          navigate("/login");
+          navigate("/enter");
         }}
       >
         Login

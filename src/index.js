@@ -20,7 +20,7 @@ const Main = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<TempNav />} />
-            <Route exact path="/login" element={<LoginAndSignUp />} />
+            <Route exact path="/enter" element={<LoginAndSignUp />} />
             <Route exact path="/feed" element={<Feed />} />
             <Route exact path="/post" element={<Upload />} />
           </Routes>
