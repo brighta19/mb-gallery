@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 
 const SignUp = () => {
   return (
-    <div id="signUpContainer">
+    <div className="loginAndSignupConainer">
       <h2>Sign Up</h2>
       <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
         <input type="text" placeholder="First Name" />

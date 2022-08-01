@@ -5,6 +5,7 @@ import { createRoot } from "react-dom/client";
 import Feed from "./views/Feed.jsx";
 import Upload from "./views/Upload.jsx";
 import LoginAndSignUp from "./views/LoginAndSignUp.jsx";
+import TempNav from "./views/TempNav.jsx";
 
 //Global Context
 import GlobalContext from "./GlobalContext.jsx";
@@ -18,6 +19,7 @@ const Main = () => {
       <GlobalContext>
         <BrowserRouter>
           <Routes>
+            <Route path="/" element={<TempNav />} />
             <Route exact path="/login" element={<LoginAndSignUp />} />
             <Route exact path="/feed" element={<Feed />} />
             <Route exact path="/post" element={<Upload />} />

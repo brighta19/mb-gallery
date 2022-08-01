@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 
 const Login = () => {
   return (
-    <div id="LoginContainer">
+    <div className="loginAndSignupConainer">
       <h2>Login</h2>
       <input type="text" placeholder="username" />
       <input type="password" placeholder="Password" />

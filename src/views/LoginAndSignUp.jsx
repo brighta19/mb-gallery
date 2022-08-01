@@ -1,4 +1,6 @@
+//Module imports
 import { useState } from "react";
+import { isMobile } from "react-device-detect";
 
 //Components
 import SignUp from "../component/SignUp";
@@ -10,14 +12,25 @@ const LoginAndSignup = () => {
     <>
       <div id="logSignContainer">
         <h1>ExiBit</h1>
-        <div style={{ backgroundColor: "rgba(0,0,0,0.5)", textAlign: "center", borderRadius: 10 }}>
-          <div id="loginBox" style={{ display: !signUpDisplay ? "flex" : "none" }}>
+        <div
+          style={{
+            backgroundColor: "rgba(0,0,0,0.5)",
+            textAlign: "center",
+            borderRadius: 10,
+            width: isMobile ? "90vw" : "40vw",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div className="LoginAndSignupBox" style={{ display: !signUpDisplay ? "flex" : "none" }}>
             <Login />
           </div>
-          <div id="signupBox" style={{ display: signUpDisplay ? "flex" : "none" }}>
+          <div className="LoginAndSignupBox" style={{ display: signUpDisplay ? "flex" : "none" }}>
             <SignUp />
           </div>
-          <p onClick={() => setSignUpDisplay(!signUpDisplay)} style={{ color: "white", cursor: "pointer" }}>
+          <p id="loginAndSignUpToggle" onClick={() => setSignUpDisplay(!signUpDisplay)}>
             {signUpDisplay ? "Have an account? Login" : "Create an account"}
           </p>
         </div>
