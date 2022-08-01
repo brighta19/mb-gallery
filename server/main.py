@@ -1,12 +1,14 @@
 import os
 import psycopg2
 import bcrypt
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from dotenv import load_dotenv
 from pydantic import BaseModel
+from auth import AuthHandler
 
 load_dotenv(".env")
 app = FastAPI()
+auth_handler = AuthHandler()
 
 # Database Configurations
 DB_HOST = os.environ.get("DB_HOST")
@@ -49,12 +51,19 @@ async def root():
 
 
 @app.get('/users', summary="Get all users")
-def get_users(conn = Depends(connection)):
+def get_users(username = Depends(auth_handler.auth_wrapper), conn = Depends(connection)):
    try:
       cursor = conn.cursor()
-      cursor.execute('select * from users')
-      conn.commit()
-      return cursor.fetchall()
+      cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+      current_user = cursor.fetchall()
+      current_user_role = current_user[0][3]
+      if current_user_role == "admin":
+         cursor.execute("SELECT * FROM users")
+         users = cursor.fetchall()
+         conn.commit()
+         return users
+      else:
+         raise HTTPException(status_code=401, detail="You are not authorized to view this page")
    finally:
       conn.close()
 
@@ -75,7 +84,7 @@ async def register(user_data: NewUser, conn = Depends(connection)):
       conn.close()
 
 
-@app.post('/login', summary="Login a user")
+@app.post('/login', summary="Login to an account")
 async def login(user_data: UserLogin, conn = Depends(connection)):
    try:
       cursor = conn.cursor()
@@ -86,10 +95,21 @@ async def login(user_data: UserLogin, conn = Depends(connection)):
       if len(user) == 0:
          return {"message": "user doesn't exist"}
 
-      if user[0][6].encode('utf-8') == bcrypt.hashpw(user_data.password.encode('utf-8'), user[0][6].encode('utf-8')):
-         return {"message": "login successful"}
+      isCorrectPassword = user[0][6].encode('utf-8') == bcrypt.hashpw(user_data.password.encode('utf-8'), user[0][6].encode('utf-8'))
+      
+      if isCorrectPassword:
+         token = auth_handler.encode_token(user[0][4]) # bearer token
+         return {
+            "message": "login successful",
+            "token": token
+         }
       else:
          return {"message": "password incorrect"}
 
    finally:
       conn.close()
+      
+
+@app.post('/upload', summary="Upload media files")
+def upload(username=Depends(auth_handler.auth_wrapper)):
+    return { 'name': username }
