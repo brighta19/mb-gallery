@@ -26,6 +26,7 @@ Enter virtual environment by running the following command
 ```
 pipenv shell
 ```
+Getting errors on VS Code? See [Note](#for-vs-code-users)
 
 Install necessary dependencies/packages:
 ```
@@ -51,8 +52,18 @@ uvicorn main:app --reload
 
 <br/>
 
-**If you're using VS Code:**  
-You may notice import errors while running the server, or maybe some annoying squiggly line under the import statements. To resolve this,
+### For VS Code users
+If you see an error after running `pipenv shell`, you can try the following:
+```
+pipenv --venv
+rm -rf <output-from-prevous-command>
+```
+It will find the path to the virtual env folder and delete it, so that you can start it new.   
+Try the `pipenv shell` command again. Should work this time
+
+<br/>  
+You may also notice import errors while running the server, or maybe some annoying squiggly line under the import statements. To resolve this,
+
 1. Step 1
    - Make sure you have necessary Python extensions installed
    - `control + shift + p` (Windows)   
