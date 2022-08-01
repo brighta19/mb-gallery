@@ -1,5 +1,12 @@
 //Fonts
-@import url('https://fonts.googleapis.com/css2?family=Edu+TAS+Beginner&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Edu+TAS+Beginner&family=Mouse+Memoirs&display=swap');
+
+$default-font: 'Edu TAS Beginner', sans-serif;
+$primary-font: 'Mouse Memoirs', sans-serif;
+
+html, body{
+    font-family: $default-font;
+}
 
 //Loader
 #loaderHolder{
@@ -346,4 +353,66 @@
 .footer {
     text-align: center;
     margin: auto;
+}
+
+//Pages
+
+//LoginAndSignup
+#logSignContainer{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: $primary-font;
+    background-color: rgba(0,0,0,0.3);
+}
+
+#signupBox{
+    height:fit-content;
+    width:40vw;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    flex-direction: column;
+}
+
+#signUpContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 50%;
+    input {
+        margin:1px;
+        border-radius: 5px;
+        width:100%;
+    }
+}
+
+#loginBox{
+    height:fit-content;
+    width:40vw;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    flex-direction: column;
+}
+
+#LoginContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 50%;
+    input {
+        margin:1px;
+        border-radius: 5px;
+        width:100%;
+    }
 }

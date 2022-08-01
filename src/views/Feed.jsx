@@ -3,7 +3,6 @@ import { isMobile } from "react-device-detect";
 import { Palette } from "react-palette";
 
 // Components
-import Post from "../component/Post";
 import Loader from "../component/Loader";
 import Image from "../component/Image";
 import Modal from "../component/Modal";
@@ -26,7 +25,7 @@ import { ConfigContext } from "../GlobalContext";
 // Firebase Methods
 import { getData } from "../function/firebaseMethods.js";
 
-const Landing = () => {
+const Feed = () => {
   const Globalconfig = useContext(ConfigContext);
 
   // States
@@ -40,7 +39,6 @@ const Landing = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedAuthor, setSelectedAuthor] = useState("");
   const [selectedDescription, setSelectedDescription] = useState("");
-  const [selectedKeyArr, setSelectedKeyArr] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [modalLoaderVisibility, setModalLoaderVisibility] = useState(true);
   // const [colorPalette, setColorPalette] = useState({});
@@ -61,9 +59,7 @@ const Landing = () => {
         [...thumbnails].find((tn, index) => {
           const rect = tn.getBoundingClientRect();
           const top = rect.top;
-          const isInView =
-            top >= range[0] * window.innerHeight &&
-            top <= range[1] * window.innerHeight;
+          const isInView = top >= range[0] * window.innerHeight && top <= range[1] * window.innerHeight;
 
           if (isInView) {
             if (selectedThumbnail !== tn) {
@@ -93,6 +89,7 @@ const Landing = () => {
       window.addEventListener("resize", handleSelectThumbnail);
       handleSelectThumbnail();
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   //Format a name to be capitalized first letter and lowercase the rest for each word <= Github copilot did that
@@ -110,12 +107,16 @@ const Landing = () => {
     return (
       <>
         <div className="information mt-4 mb-4">
-          <img key='1' src={ProfileImg} alt="Profile" />
+          <img key="1" src={ProfileImg} alt="Profile" />
           <h3 className="mt-2">MetaBronx</h3>
           <p>All the artworks are made by 2022 summer cohort participants</p>
           <div className="social mt-2">
-            <a href='https://www.metabronx.com/' rel="noreferrer" target='_blank'>Website</a> 
-            <a href='mailto:metabronx@gmail.com?Subject:hello' rel="noreferrer" target='_blank'>Contact</a>
+            <a href="https://www.metabronx.com/" rel="noreferrer" target="_blank">
+              Website
+            </a>
+            <a href="mailto:metabronx@gmail.com?Subject:hello" rel="noreferrer" target="_blank">
+              Contact
+            </a>
           </div>
         </div>
         <hr></hr>
@@ -133,7 +134,6 @@ const Landing = () => {
                     setSelectedImage(FirebaseData[key].image_url);
                     setModalVisibility(true);
                     setSelectedAuthor(formatName(FirebaseData[key].author));
-                    setSelectedKeyArr(key);
                     setSelectedIndex(keys.indexOf(key));
                   }
                 }}
@@ -144,16 +144,13 @@ const Landing = () => {
 
         <Palette src={selectedImage}>
           {({ data, loading, error }) => (
-            <Modal
-              visibility={modalVisibility}
-              bgColor1={data.lightMuted}
-              bgColor2={data.lightVibrant}
-            >
+            <Modal visibility={modalVisibility} bgColor1={data.lightMuted} bgColor2={data.lightVibrant}>
               <Loader visibility={modalLoaderVisibility} />
               <img
                 style={{
                   display: modalLoaderVisibility === false ? "" : "none",
                 }}
+                alt=""
                 id="modalImage"
                 src={selectedImage}
                 onLoad={() => {
@@ -162,11 +159,7 @@ const Landing = () => {
               />
               <h5 className="author mt-3">By {selectedAuthor}</h5>
               <h5 className="author">Artist Statement: {selectedDescription}</h5>
-              <Button
-                id="modalClose"
-                variant="danger"
-                onClick={() => setModalVisibility(false)}
-              >
+              <Button id="modalClose" variant="danger" onClick={() => setModalVisibility(false)}>
                 Close
               </Button>
 
@@ -176,15 +169,9 @@ const Landing = () => {
                 onClick={() => {
                   if (selectedIndex < keys.length - 1) {
                     setSelectedIndex(selectedIndex + 1);
-                    setSelectedImage(
-                      FirebaseData[keys[selectedIndex + 1]].image_url
-                    );
-                    setSelectedAuthor(
-                      formatName(FirebaseData[keys[selectedIndex + 1]].author)
-                    );
-                    setSelectedDescription(
-                      formatName(FirebaseData[keys[selectedIndex + 1]].description)
-                    );
+                    setSelectedImage(FirebaseData[keys[selectedIndex + 1]].image_url);
+                    setSelectedAuthor(formatName(FirebaseData[keys[selectedIndex + 1]].author));
+                    setSelectedDescription(formatName(FirebaseData[keys[selectedIndex + 1]].description));
                   }
                 }}
               >
@@ -195,15 +182,9 @@ const Landing = () => {
                 onClick={() => {
                   if (selectedIndex > 0) {
                     setSelectedIndex(selectedIndex - 1);
-                    setSelectedImage(
-                      FirebaseData[keys[selectedIndex - 1]].image_url
-                    );
-                    setSelectedAuthor(
-                      formatName(FirebaseData[keys[selectedIndex - 1]].author),
-                    );
-                    setSelectedDescription(
-                      formatName(FirebaseData[keys[selectedIndex + 1]].description)
-                    );
+                    setSelectedImage(FirebaseData[keys[selectedIndex - 1]].image_url);
+                    setSelectedAuthor(formatName(FirebaseData[keys[selectedIndex - 1]].author));
+                    setSelectedDescription(formatName(FirebaseData[keys[selectedIndex + 1]].description));
                   }
                 }}
               >
@@ -227,4 +208,4 @@ const Landing = () => {
   }
 };
 
-export default Landing;
+export default Feed;
