@@ -11,12 +11,12 @@ app = FastAPI()
 auth_handler = AuthHandler()
 
 # Database Configurations
-DB_HOST = os.environ.get("DB_HOST")
-DB_DATABASE = os.environ.get("DB_DATABASE")
-DB_USER = os.environ.get("DB_USER")
-DB_PORT = os.environ.get("DB_PORT")
-DB_PASSWORD = os.environ.get("DB_PASSWORD")
-
+DB_URL = os.environ.get("DB_URL")
+DB_USER = DB_URL.split(':')[1][2:]
+DB_DATABASE = DB_URL.split(':')[3].split('/')[1]
+DB_HOST = DB_URL.split(':')[2].split('@')[1]
+DB_PORT = DB_URL.split(':')[3].split('/')[0]
+DB_PASSWORD = DB_URL.split(':')[2].split('@')[0]
 
 # Connect to Postgres Database
 def connection():
