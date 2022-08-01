@@ -36,6 +36,11 @@ pipenv install -r requirements.txt
 ### Step 2: The Environment Variables
 Get `.env` file from one of the devs working on the project to connect to database and place in server's root directory.  
 
+The `DB_URL` variable needs to be updated using Heroku Postgres config data, for which you need to be the collaborator in Heroku project. There are 2 ways to get the URL.
+
+1. Go to Heroku website > login to your account > go to `exibit-me` > select `settings` tab > in "Config Vars" section click `Reveal Config Vars` button > Copy `DATABASE_URL` value and paste it in `DB_URL` env variable.
+2. Install `Heroku Cli` on your machine > run `heroku login` > authenticate via browser > run `heroku config:get DATABASE_URL -a exibit-me`
+
 For `JWT_SECRET` in `.env` file, you can regenerate new secret using the following command:
 ```
 openssl rand -hex 32
