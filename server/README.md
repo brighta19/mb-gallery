@@ -53,6 +53,8 @@ Start API server using the following command:
 uvicorn main:app --reload  
 ```
 
+FastAPI uses Swagger UI to display all the API routes and test them. Once the server is running, go to `127.0.0.1:8000/docs` (or wherever it's running at + `/docs`) to see the UI version of API.
+
 ---
 
 <br/>

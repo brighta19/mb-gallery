@@ -3,3 +3,5 @@
 ._*
 Pipfile
 Pipfile.lock
+.venv
+__pycache__
