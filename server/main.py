@@ -5,7 +5,6 @@ from fastapi import FastAPI, Depends, HTTPException, Query
 from dotenv import load_dotenv
 from pydantic import BaseModel
 from auth import AuthHandler, TokenType
-from typing import Union, final
 from dataclasses import dataclass
 
 load_dotenv(".env")
@@ -144,7 +143,7 @@ async def login(user_data: UserLogin, conn = Depends(connection)):
       conn.commit()
 
       if len(user) == 0:
-         return {"message": "user doesn't exist"}
+         return {"message": "User doesn't exist"}
 
       isCorrectPassword = user[0][7].encode('utf-8') == bcrypt.hashpw(user_data.password.encode('utf-8'), user[0][7].encode('utf-8'))
       
@@ -160,16 +159,19 @@ async def login(user_data: UserLogin, conn = Depends(connection)):
          cursor.execute("UPDATE accounts SET last_login_at=CURRENT_TIMESTAMP, last_login_ip=%s, login_count=login_count+1 WHERE uid=%s", ("localhost", user[0][0])) # Implement IP address fetching
          cursor.execute("SELECT * FROM token_management WHERE uid=%s ORDER BY created_at DESC;", (user[0][0],))
          latest_token = cursor.fetchall()
-         cursor.execute("INSERT INTO token_management (uid, access_token, refresh_token, pair_count) VALUES (%s, %s, %s, %s);", (user[0][0], access_token, refresh_token, latest_token[0][5] + 1))
+         if len(latest_token) == 0:
+            cursor.execute("INSERT INTO token_management (uid, access_token, refresh_token) VALUES (%s, %s, %s);", (user[0][0], access_token, refresh_token))
+         else:
+            cursor.execute("INSERT INTO token_management (uid, access_token, refresh_token, pair_count) VALUES (%s, %s, %s, %s);", (user[0][0], access_token, refresh_token, latest_token[0][5] + 1))
          conn.commit()
          
          return {
-            "message": "login successful",
+            "message": "Login successful",
             "access-token": access_token,
             "refresh-token": refresh_token
          }
       else:
-         return {"user-data": user}
+         return {"message": "Incorrect password"}
 
    finally:
       conn.close()
@@ -209,8 +211,7 @@ def validate_refresh_token(token: Token, conn=Depends(connection)):
       return {
          "message": "token validated",
          "new-access-token": new_access_token,
-         "new-refesh-token": new_refresh_token,
-         "dta": token_data
+         "new-refesh-token": new_refresh_token
       }
    finally:
       conn.close()
@@ -221,7 +222,7 @@ def delete_refresh_token(token: Token, conn=Depends(connection)):
    try:
       cursor = conn.cursor()
       cursor.execute("DELETE FROM token_management WHERE refresh_token=%s;", (token.value,))
-      return {"message": "token deleted"}
+      return {"message": "Token has been deleted successfully"}
    finally:
       conn.close()
 
@@ -229,4 +230,4 @@ def delete_refresh_token(token: Token, conn=Depends(connection)):
 @app.post('/upload', summary="Upload media files")
 def upload(uid=Depends(auth_handler.auth_wrapper)):
    # work in progress
-   return { 'uid': uid }
+   return { 'user-id': uid }
