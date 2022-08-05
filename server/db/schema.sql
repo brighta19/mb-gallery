@@ -65,7 +65,6 @@ CREATE TRIGGER trigger_accounts_genid BEFORE INSERT ON accounts FOR EACH ROW EXE
 CREATE TABLE "token_management"(
 	"id" SERIAL PRIMARY KEY NOT NULL UNIQUE,
 	"uid" VARCHAR(8) NOT NULL,
-	"access_token" TEXT NOT NULL,
 	"refresh_token" TEXT NOT NULL,
 	"created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	"pair_count" INTEGER NOT NULL DEFAULT 0,
