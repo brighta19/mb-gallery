@@ -109,3 +109,5 @@ If you want, you can set up you own local database too. The original schema for 
 - [ ] Dockerize the entire project
 - [ ] Separate Authentication code and Classes from `main.py`
 - [ ] Organize folder structure
+- [ ] Make functions asynchronous
+- [ ] Replace psycopg2 with asyncpg

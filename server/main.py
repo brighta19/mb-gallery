@@ -8,16 +8,25 @@ from auth import AuthHandler, TokenType
 from dataclasses import dataclass
 
 load_dotenv(".env")
-app = FastAPI()
+app = FastAPI(
+   title="Exibit API",
+   description="API made for authenticating users and protecting private routes",
+   version="1.0.0",
+   contact={
+      "name": "Exibit Admin",
+      "url": "https://exibit.me/contact",
+      "email": "admin@exibit.me"
+   }
+)
 auth_handler = AuthHandler()
 
 # database configurations
-DB_URL = os.environ.get("DB_URL")
-DB_USER = DB_URL.split(':')[1][2:]
-DB_DATABASE = DB_URL.split(':')[3].split('/')[1]
-DB_HOST = DB_URL.split(':')[2].split('@')[1]
-DB_PORT = DB_URL.split(':')[3].split('/')[0]
-DB_PASSWORD = DB_URL.split(':')[2].split('@')[0]
+# DB_URL = os.environ.get("DB_URL")
+DB_USER = os.environ.get("DB_USER")
+DB_DATABASE = os.environ.get("DB_DATABASE")
+DB_HOST = os.environ.get("DB_HOST")
+DB_PORT = os.environ.get("DB_PORT")
+DB_PASSWORD = os.environ.get("DB_PASSWORD")
 
 
 # connect to postgres database
@@ -68,14 +77,14 @@ class Token(BaseModel):
 # ------------------------------------------------------------------------------
 
 
-@app.get("/")
+@app.get("/", tags=["Public"])
 async def root():
    return {
       "message": "Welcome to Exibit"
    }
 
 
-@app.get('/users', summary="Get all user accounts data")
+@app.get('/users', summary="Get all user accounts data", tags=["Private"])
 def get_users(uid = Depends(auth_handler.auth_wrapper), conn = Depends(connection)):
    try:
       cursor = conn.cursor()
@@ -93,7 +102,7 @@ def get_users(uid = Depends(auth_handler.auth_wrapper), conn = Depends(connectio
       conn.close()
       
 
-@app.get('/users/{username}', summary="Get public information of a user account")
+@app.get('/users/{username}', summary="Get public information of a user account", tags=["Public"])
 def get_users(username: str, conn = Depends(connection)):
    try:
       cursor = conn.cursor()
@@ -104,11 +113,11 @@ def get_users(username: str, conn = Depends(connection)):
          raise HTTPException(status_code=404, detail="User not found")
       
       current_user_data = PublicUserProfile(
-         current_user[0][5],
-         current_user[0][1],
+         current_user[0][6],
          current_user[0][2],
          current_user[0][3],
-         current_user[0][8]
+         current_user[0][4],
+         current_user[0][9]
       )
       conn.commit()
       return current_user_data
@@ -116,7 +125,7 @@ def get_users(username: str, conn = Depends(connection)):
       conn.close()
 
 
-@app.post('/register', summary="Create a new user")
+@app.post('/register', summary="Create a new user", tags=["Auth"])
 async def register(user_data: NewUser, conn = Depends(connection)):
    # todo:
    # - return msg if username or email already exists
@@ -134,7 +143,7 @@ async def register(user_data: NewUser, conn = Depends(connection)):
       conn.close()
 
 
-@app.post('/login', summary="Login to an account")
+@app.post('/login', summary="Login to an account", tags=["Auth"])
 async def login(user_data: UserLogin, conn = Depends(connection)):
    try:
       cursor = conn.cursor()
@@ -177,11 +186,13 @@ async def login(user_data: UserLogin, conn = Depends(connection)):
       conn.close()
 
 
-@app.post('/token', summary="Re-authenticate with a refresh token")
+@app.post('/token', summary="Re-authenticate with a refresh token", tags=["Auth"])
 def validate_refresh_token(token: Token, conn=Depends(connection)):
    
    # todo:
    # - remove old refresh token from database
+   # - invalidate old refresh tokens from database immediately
+   # - add column in token table to track validation
    # - perhaps a better pair count system for tokens
    
    uid = auth_handler.decode_token(token.value, TokenType.refresh)
@@ -198,9 +209,8 @@ def validate_refresh_token(token: Token, conn=Depends(connection)):
       if len(token_data) == 0:
          raise HTTPException(status_code=401, detail="Invalid refresh token")
       
-      # delete token on 3rd use
-      if token_data[0][6] == 2:
-         cursor.execute("DELETE FROM token_management WHERE refresh_token=%s;", (token.value,))
+      # delete token immediately
+      cursor.execute("DELETE FROM token_management WHERE refresh_token=%s;", (token.value,))
       
       cursor.execute("SELECT * FROM token_management WHERE uid=%s ORDER BY created_at DESC;", (uid,))
       latest_token = cursor.fetchall()
@@ -217,9 +227,10 @@ def validate_refresh_token(token: Token, conn=Depends(connection)):
       conn.close()
 
 
-@app.delete('/logout', summary="Delete all tokens")
+@app.delete('/logout', summary="Delete all tokens", tags=["Auth"])
 def delete_refresh_token(token: Token, conn=Depends(connection)):
    # work in progress
+   # use post
    try:
       cursor = conn.cursor()
       cursor.execute("DELETE FROM token_management WHERE refresh_token=%s;", (token.value,))
@@ -228,7 +239,8 @@ def delete_refresh_token(token: Token, conn=Depends(connection)):
       conn.close()
 
 
-@app.post('/upload', summary="Upload media files")
+@app.post('/upload', summary="Upload media files", tags=["Private"])
 def upload(uid=Depends(auth_handler.auth_wrapper)):
    # work in progress
+   # use put
    return { 'user-id': uid }
